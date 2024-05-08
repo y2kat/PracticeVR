@@ -7,6 +7,7 @@ public class LeverPuzzle : MonoBehaviour
     public AudioClip victorySound; 
     public GameObject videoObject;
     public GameObject[] objectsToActivate;
+    public GameObject objectToDeactivate;
     private int nextLeverIndex = 0;
     private AudioSource audioSource;
     public VideoPlayer videoPlayer;
@@ -34,6 +35,7 @@ public class LeverPuzzle : MonoBehaviour
     void OnVideoEnd(VideoPlayer vp)
     {
         videoObject.SetActive(false);
+        objectToDeactivate.SetActive(false);
 
         foreach (GameObject obj in objectsToActivate)
         {
