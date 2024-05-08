@@ -1,43 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class LeverPuzzle : MonoBehaviour
 {
     public Lever[] levers;
-    private List<Lever> activatedLevers = new List<Lever>();
+    public AudioClip victorySound; 
+    public GameObject videoObject;
+    public GameObject[] objectsToActivate;
+    private int nextLeverIndex = 0;
+    private AudioSource audioSource;
+    public VideoPlayer videoPlayer;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = victorySound;
+        videoPlayer.loopPointReached += OnVideoEnd;
+    }
 
     void Update()
     {
-        foreach (Lever lever in levers)
+        if (nextLeverIndex < levers.Length && levers[nextLeverIndex].isActive)
         {
-            if (lever.isActive && !activatedLevers.Contains(lever))
+            nextLeverIndex++;
+            if (nextLeverIndex >= levers.Length)
             {
-                activatedLevers.Add(lever);
-                StartCoroutine(CheckSolutionWithDelay());
+                Debug.Log("¡Puzzle resuelto!");
+                audioSource.Play(); 
             }
         }
     }
 
-    IEnumerator CheckSolutionWithDelay()
+    void OnVideoEnd(VideoPlayer vp)
     {
-        yield return new WaitForSeconds(0.1f);
+        videoObject.SetActive(false);
 
-        if (CheckSolution())
+        foreach (GameObject obj in objectsToActivate)
         {
-            Debug.Log("lo resolviste pá :v");
+            obj.SetActive(true);
         }
-    }
-
-    bool CheckSolution()
-    {
-        for (int i = 0; i < activatedLevers.Count; i++)
-        {
-            if (activatedLevers[i] != levers[i])
-            {
-                return false;
-            }
-        }
-        return activatedLevers.Count == levers.Length;
     }
 }
