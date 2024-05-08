@@ -12,6 +12,10 @@ public class LeverPuzzle : MonoBehaviour
     private AudioSource audioSource;
     public VideoPlayer videoPlayer;
 
+    [Header ("Objetos de Victoria")]
+    public GameObject winObjectToActivate;
+    public GameObject[] winObjectToDeactivate;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -21,13 +25,27 @@ public class LeverPuzzle : MonoBehaviour
 
     void Update()
     {
+        PuzzleSolved();
+    }
+
+    void PuzzleSolved()
+    {
         if (nextLeverIndex < levers.Length && levers[nextLeverIndex].isActive)
         {
             nextLeverIndex++;
             if (nextLeverIndex >= levers.Length)
             {
-                Debug.Log("¡Puzzle resuelto!");
-                audioSource.Play(); 
+                Debug.Log("RESOLVIDO Bv");
+                audioSource.Play();
+
+                //objetos por activar
+                winObjectToActivate.SetActive(true);
+
+                //objetos por desactivar
+                foreach (GameObject obj in winObjectToDeactivate)
+                {
+                    obj.SetActive(false);
+                }
             }
         }
     }
