@@ -19,6 +19,8 @@ public class Agent : MonoBehaviour
             // Si no, el jugador ha fallado
             PuzzleController.instance.RegisterMiss(this);
         }
+
+        Destroy(gameObject);
     }
 }
 

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7718784181981351701}
   m_Layer: 0
   m_Name: CannonMinion 1
-  m_TagString: Untagged
+  m_TagString: Agent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  rotationSpeed: 100
 --- !u!54 &-8388002553361357260
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -75,7 +76,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -90,8 +91,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 11.951882, y: 22.380032, z: 19.577677}
+  m_Center: {x: -1.0648999, y: 15.251496, z: -3.15305}
 --- !u!1 &6060054864807828406
 GameObject:
   m_ObjectHideFlags: 0

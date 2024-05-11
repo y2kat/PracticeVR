@@ -10,8 +10,6 @@ public class Gun : MonoBehaviour
     [SerializeField] Transform spawner;
     [SerializeField] float bulletSpeed;
 
-
-
     void Start() {
         XRGrabInteractable _interactor = GetComponent<XRGrabInteractable>();
         _interactor.activated.AddListener(FireGun);

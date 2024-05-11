@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
 
 public class PuzzleController : MonoBehaviour
 {
@@ -19,12 +18,12 @@ public class PuzzleController : MonoBehaviour
     {
         Dictionary<string, int> agentCounts = new Dictionary<string, int>
         {
-            {"1", 2},
-            {"2", 2},
-            {"3", 2},
+            {"1", 1},
+            {"2", 1},
+            {"3", 1},
             {"4", 2},
-            {"5", 2},
-            {"0", 10},
+            {"5", 1},
+            {"0", 5},
             {"-", 2}
         };
 
@@ -69,9 +68,6 @@ public class PuzzleController : MonoBehaviour
         // El jugador ha fallado, reiniciar el puzzle
         Debug.Log("Has fallado, vuelve a intentarlo.");
         currentIndex = 0;
-
-        // Reiniciar el nivel
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
 

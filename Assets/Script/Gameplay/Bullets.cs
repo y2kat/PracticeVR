@@ -19,12 +19,12 @@ public class Bullets : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Ghost") 
+        if (other.gameObject.tag == "Agent")
         {
-            Debug.Log("Colisión con Fantasma");
-            Destroy(other.gameObject);
+            Debug.Log("Colisión con Agent");
+            other.gameObject.GetComponent<Agent>().OnShot();
             Destroy(gameObject);
-            GameManager.instance.enemiesDefeated++;
-        } 
+        }
     }
+
 }

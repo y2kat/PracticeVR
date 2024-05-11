@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Wander : MonoBehaviour
 {
-    public float speed = 1;
+    public float speed = .2f;
     public float rotationSpeed = 50; // La velocidad de rotación
     private Vector3 targetPosition;
 
