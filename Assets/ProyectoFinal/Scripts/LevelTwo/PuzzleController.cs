@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PuzzleController : MonoBehaviour
 {
@@ -21,13 +22,13 @@ public class PuzzleController : MonoBehaviour
     {
         Dictionary<string, int> agentCounts = new Dictionary<string, int>
         {
-            //{"1", 1},
-            //{"2", 1},
-            //{"3", 1},
+            {"1", 1},
+            {"2", 1},
+            {"3", 1},
             {"4", 2},
-            //{"5", 1},
-            //{"0", 5},
-            {"-", 2}
+            {"5", 1},
+            {"0", 5},
+            {"-", 1}
         };
 
         // Instancia la cantidad especificada de cada tipo de agente
@@ -66,6 +67,9 @@ public class PuzzleController : MonoBehaviour
 
             //objetos por activar
             winObjectToActivate.SetActive(true);
+
+            // Destruye todos los agentes
+            AgentPool.instance.DestroyAllAgents();
         }
     }
 
@@ -74,6 +78,8 @@ public class PuzzleController : MonoBehaviour
         // El jugador ha fallado, reiniciar el puzzle
         Debug.Log("Has fallado, vuelve a intentarlo.");
         currentIndex = 0;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
 

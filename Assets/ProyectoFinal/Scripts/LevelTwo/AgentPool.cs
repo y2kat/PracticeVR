@@ -11,12 +11,14 @@ public class AgentPool : MonoBehaviour
     public int poolSize = 10;
 
     private Dictionary<string, Queue<GameObject>> agentPools;
+    public List<GameObject> activeAgents;
 
     private void Awake()
     {
         instance = this;
 
         agentPools = new Dictionary<string, Queue<GameObject>>();
+        activeAgents = new List<GameObject>();
 
         foreach (GameObject prefab in agentPrefabs)
         {
@@ -36,23 +38,40 @@ public class AgentPool : MonoBehaviour
 
     public GameObject GetAgent(string id)
     {
+        GameObject agent;
+
         if (agentPools[id].Count > 0)
         {
-            GameObject agent = agentPools[id].Dequeue();
-            agent.SetActive(true);
-            return agent;
+            agent = agentPools[id].Dequeue();
         }
         else
         {
             // Si no hay agentes disponibles en el pool, instanciamos uno nuevo
-            return Instantiate(agentPrefabs.First(prefab => prefab.GetComponent<Agent>().id == id));
+            agent = Instantiate(agentPrefabs.First(prefab => prefab.GetComponent<Agent>().id == id));
         }
+
+        agent.SetActive(true);
+        activeAgents.Add(agent); // Añade el agente a la lista de agentes activos
+        return agent;
     }
 
     public void ReturnAgent(GameObject agent)
     {
         agent.SetActive(false);
         agentPools[agent.GetComponent<Agent>().id].Enqueue(agent);
+        activeAgents.Remove(agent); // Elimina el agente de la lista de agentes activos
+    }
+
+    public void DestroyAllAgents()
+    {
+        // Destruye todos los agentes activos
+        foreach (GameObject agent in activeAgents)
+        {
+            Destroy(agent);
+        }
+
+        // Limpia la lista de agentes activos
+        activeAgents.Clear();
     }
 }
 
