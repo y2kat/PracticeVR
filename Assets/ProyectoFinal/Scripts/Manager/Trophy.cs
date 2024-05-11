@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.SceneManagement;
 
 public class Trophy : MonoBehaviour
 {
     public Inventory inventory;
-    public RoomManager roomManager;
+    public string nextLevelSceneName;
     private XRGrabInteractable grabInteractable;
 
     void Start()
     {
         inventory = GameObject.FindObjectOfType<Inventory>();
-        roomManager = GameObject.FindObjectOfType<RoomManager>();
         grabInteractable = GetComponent<XRGrabInteractable>();
         grabInteractable.selectEntered.AddListener(HandleGrab);
     }
@@ -18,7 +18,7 @@ public class Trophy : MonoBehaviour
     void HandleGrab(SelectEnterEventArgs args)
     {
         inventory.AddTrophy();
-        roomManager.UnlockNextRoom();
+        SceneManager.LoadScene(nextLevelSceneName);
         Destroy(gameObject);
     }
 }
