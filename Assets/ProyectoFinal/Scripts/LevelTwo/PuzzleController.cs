@@ -9,6 +9,9 @@ public class PuzzleController : MonoBehaviour
     private List<string> sequence = new List<string> { "4", "-", "4" };
     private int currentIndex = 0; // El índice del próximo agente en la secuencia
 
+    [Header("Objetos de Victoria")]
+    public GameObject winObjectToActivate;
+
     private void Awake()
     {
         instance = this;
@@ -18,12 +21,12 @@ public class PuzzleController : MonoBehaviour
     {
         Dictionary<string, int> agentCounts = new Dictionary<string, int>
         {
-            {"1", 1},
-            {"2", 1},
-            {"3", 1},
+            //{"1", 1},
+            //{"2", 1},
+            //{"3", 1},
             {"4", 2},
-            {"5", 1},
-            {"0", 5},
+            //{"5", 1},
+            //{"0", 5},
             {"-", 2}
         };
 
@@ -60,6 +63,9 @@ public class PuzzleController : MonoBehaviour
         {
             // El jugador ha ganado el puzzle
             Debug.Log("¡Has ganado el puzzle!");
+
+            //objetos por activar
+            winObjectToActivate.SetActive(true);
         }
     }
 
