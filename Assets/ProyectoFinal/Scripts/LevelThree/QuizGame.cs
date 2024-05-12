@@ -16,6 +16,8 @@ public class QuizGame : MonoBehaviour
     private int currentQuestion = 0;
     private List<Question> questions;
 
+    public GameObject objectToActivate;
+
     void Start()
     {
         // Muestra la imagen inicial
@@ -69,6 +71,11 @@ public class QuizGame : MonoBehaviour
             if (currentQuestion < questions.Count)
             {
                 ShowQuestion();
+            }
+            else
+            {
+                // Si el jugador ha respondido correctamente a todas las preguntas, activa el objeto
+                objectToActivate.SetActive(true);
             }
         }
         else
