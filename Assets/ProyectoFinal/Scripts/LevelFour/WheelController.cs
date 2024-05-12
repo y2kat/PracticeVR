@@ -8,6 +8,8 @@ public class WheelController : MonoBehaviour
     public GameObject[] images;
     public float[] correctRotations; // Los valores de rotación correctos para cada objeto.
 
+    public GameObject objectToActivate;
+
     void Start()
     {
         // Al inicio, solo la primera imagen y la primera rueda son visibles.
@@ -33,6 +35,11 @@ public class WheelController : MonoBehaviour
                 {
                     images[i + 1].SetActive(true);
                     wheels[i + 1].SetActive(true);
+                }
+                // Si la rueda alineada es la última, activa y desactiva los objetos correspondientes.
+                else if (i == wheels.Length - 1)
+                {
+                    objectToActivate.SetActive(true);
                 }
             }
         }
