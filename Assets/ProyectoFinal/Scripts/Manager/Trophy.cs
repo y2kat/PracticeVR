@@ -40,7 +40,7 @@ public class Trophy : MonoBehaviour
     void HandleRelease(SelectExitEventArgs args)
     {
         // Cuando el trofeo es soltado, restablece su escala a la original.
-        transform.localScale = originalScale;
+        transform.localScale = originalScale * 0.5f;
     }
 }
 
