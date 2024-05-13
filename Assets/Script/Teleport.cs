@@ -9,6 +9,7 @@ public class Teleport : MonoBehaviour {
         if (other.gameObject.CompareTag("Player"))
         {
             other.transform.position = teleportTarget.position;
+            other.transform.rotation = teleportTarget.rotation;
         }
     }
 }
