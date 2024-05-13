@@ -9,6 +9,8 @@ public class Inventory : MonoBehaviour
     public int totalTrophies = 5;
     public TextMeshProUGUI trophyCountText;
 
+    public GameObject[] objectsToActivate;
+
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -17,8 +19,19 @@ public class Inventory : MonoBehaviour
 
     public void AddTrophy()
     {
-        trophyCount++;
-        UpdateTrophyCountText();
+        if (trophyCount < totalTrophies)
+        {
+            trophyCount++;
+            UpdateTrophyCountText();
+        }
+
+        if (trophyCount == totalTrophies)
+        {
+            foreach (GameObject obj in objectsToActivate)
+            {
+                obj.SetActive(true);
+            }
+        }
     }
 
     private void UpdateTrophyCountText()
