@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3521512327617943813}
   m_Layer: 0
   m_Name: Player_Complete
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,8 +52,16 @@ PrefabInstance:
       propertyPath: rightHand.vrTarget
       value: 
       objectReference: {fileID: 3669468129480050343}
+    - target: {fileID: 448565838, guid: d43fa6af47efb1b46b35dda9ecc46ae2, type: 3}
+      propertyPath: headBodyPositionOffset.y
+      value: -0.14
+      objectReference: {fileID: 0}
     - target: {fileID: 42658449620386925, guid: d43fa6af47efb1b46b35dda9ecc46ae2, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 42658449620386925, guid: d43fa6af47efb1b46b35dda9ecc46ae2, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 854660347544116951, guid: d43fa6af47efb1b46b35dda9ecc46ae2, type: 3}
@@ -114,9 +122,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3521512327617943813}
     m_Modifications:
-    - target: {fileID: 9082846104368584644, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
-      propertyPath: m_InteractionManager
-      value: 
+    - target: {fileID: 8961147504984085757, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9082846104622987117, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
       propertyPath: m_Name
@@ -166,13 +174,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9082846104622987120, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
-      propertyPath: barraVida
-      value: 
+    - target: {fileID: 9198933422201148570, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 9082846104903265411, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
-      propertyPath: m_InteractionManager
-      value: 
+    - target: {fileID: 9198933422201148570, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dbe7f5f476629dc40af6bcd5066b5d87, type: 3}
