@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ProyectoFinal/Scenes/LevelFour.unity
     guid: 3b0a656741b734848892df200324b5f2
+  - enabled: 1
+    path: Assets/ProyectoFinal/Scenes/Final.unity
+    guid: bc16c83582ed72d43833d3c9f056b6bd
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5b89b76ef6ffdb143b6e7a723e6ef0a3, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: aa1f3c85fa6e52341a47318fc94bddd9, type: 2}
