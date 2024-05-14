@@ -23,6 +23,14 @@ public class Trophy : MonoBehaviour
     {
         inventory.AddTrophy();
 
+        PuzzleTrophy puzzleTrophy = GetComponent<PuzzleTrophy>();
+
+        if (puzzleTrophy != null && !puzzleTrophy.CanBePickedUp())
+        {
+            // Si este trofeo es un PuzzleTrophy y no puede ser recogido, no hagas nada
+            return;
+        }
+
         // Si el jugador ha recogido el último trofeo, haz que el trofeo sea hijo del controlador del jugador.
         if (inventory.trophyCount == inventory.totalTrophies)
         {
