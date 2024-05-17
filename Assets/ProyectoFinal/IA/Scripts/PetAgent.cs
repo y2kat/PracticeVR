@@ -22,10 +22,11 @@ public class PetAgent : BasicAgent
 
     void decisionManager() {
         AgentStates newState = isFed ? AgentStates.seeking : AgentStates.idling;
+        //si comió y la distancia al target es menor que el umbral de parada, pos idle
         if (isFed && Vector3.Distance(transform.position, target.position) < stopThreshold) {
             newState = AgentStates.idling;
         }
-        updateState(newState);
+        updateState(newState); //cambiar el estado del agente
         movementManager();
     }
 
@@ -38,7 +39,7 @@ public class PetAgent : BasicAgent
     }
 
     void movementManager() {
-        //según el estado, ejecuta idle o seek
+        //dependiendo del estado del agente...
         switch (agentState) {
             case AgentStates.idling:
                 idle();
@@ -63,9 +64,11 @@ public class PetAgent : BasicAgent
         }
         //se multiplica temporalmente, entre más lejos esté más se va apresurar
         maxVel *= 2;
+        //establece la velocidad del rb para buscar al objetivo
         rb.velocity = SteeringBehaviours.seek(this, target.position);
+        //ajusta la velocidad del rb para llegar al objetivo
         rb.velocity = SteeringBehaviours.arrival(this, target.position, slowingRadius, stopThreshold);
-        maxVel /= 2;
+        maxVel /= 2; //restaura la velocidad máxima
     }
 
     private void idle() {
