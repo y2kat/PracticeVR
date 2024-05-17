@@ -2,16 +2,16 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Animator))]
-public class GroupAgent : BasicAgent
+public class AgressiveAgent : BasicAgent
 {
-    [SerializeField] float eyesPerceptRadious, earsPerceptRadious;
-    [SerializeField] Transform eyesPercept, earsPercept;
+    [SerializeField] Vector3 cubeSize;
+    [SerializeField] Transform cubePercept;
     [SerializeField] AgentStates agentState;
     Animator anim;
     Rigidbody rb;
-    //dos arrays de Colliders que representan los objetos percibidos por los "ojos" y "oídos" del agente
-    [SerializeField] Collider[] perceived, perceived2; 
+    [SerializeField] Collider[] perceived;
     string animStateName = "";
+    bool enemyInTerritory = false;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
@@ -25,26 +25,22 @@ public class GroupAgent : BasicAgent
     }
 
     void FixedUpdate() {
-        //detecta los objetos dentro del radio de percepción de los "ojos" y "oídos" del agente
-        perceived = Physics.OverlapSphere(eyesPercept.position, eyesPerceptRadious);
-        perceived2 = Physics.OverlapSphere(earsPercept.position, earsPerceptRadious);
+        //actualizamos la variable perceived con los objetos que se encuentran en el cubo
+        perceived = Physics.OverlapBox(cubePercept.position, cubeSize * .5f);
     }
 
     void perceptionManager() {
         if (perceived != null) {
             //tmp representa a cada uno de los objetos que el agente está percibiendo en ese momento
             foreach (Collider tmp in perceived) {
-                //comprueba si el objeto percibido tiene la etiqueta compadre
-                if (tmp.CompareTag("Compadre")) {
+                //comprueba si el objeto percibido tiene la etiqueta player
+                if (tmp.CompareTag("Player")) {
                     //el agente establece ese objeto como su target
                     target = tmp.transform;
+                    enemyInTerritory = true;
                 }
-            }
-        }
-        if (perceived2 != null) {
-            foreach (Collider tmp in perceived2) {
-                if (tmp.CompareTag("Compadre")) {
-                    target = tmp.transform;
+                else {
+                    enemyInTerritory = false;
                 }
             }
         }
@@ -53,14 +49,18 @@ public class GroupAgent : BasicAgent
     void decisionManager() {
         AgentStates newState;
         if (target == null) {
-            newState = AgentStates.Wander;
+            newState = AgentStates.Idle;
+        }
+        else if (enemyInTerritory) {
+            newState = AgentStates.Seeking;
+            //si la distancia al target es menor que el umbral de parada, pos ataca :B
+            if (Vector3.Distance(transform.position, target.position) < stopThreshold) {
+                newState = AgentStates.Attack;
+            }
         }
         else {
-            newState = AgentStates.Seek;
-            //si la distancia al target es menor que el umbral de parada, pos idle
-            if (Vector3.Distance(transform.position, target.position) < stopThreshold) {
-                newState = AgentStates.Idle;
-            }
+            newState = AgentStates.Returning;
+            target = cubePercept;
         }
         updateState(newState); //cambia el estado del agente
         movementManager();
@@ -78,21 +78,24 @@ public class GroupAgent : BasicAgent
         //dependiendo del estado del agente...
         switch (agentState) {
             case AgentStates.Idle:
-                idle();
+                idling();
                 break;
-            case AgentStates.Wander:
-                wander();
+            case AgentStates.Seeking:
+                seeking();
                 break;
-            case AgentStates.Seek:
-                seek();
+            case AgentStates.Attack:
+                attacking();
+                break;
+            case AgentStates.Returning:
+                returning();
                 break;
         }
     }
 
-    private void seek() {
+    private void seeking() {
         // cambia la animación a "Walk" si no está en ese estado
         if (animStateName != "walk") {
-            anim.Play("ChickenWalk", 0);
+            anim.Play("LionWalk", 0);
             animStateName = "walk";
         }
         //se multiplica temporalmente, entre más lejos esté más se va apresurar
@@ -104,41 +107,46 @@ public class GroupAgent : BasicAgent
         maxVel /= 2; //restaura la velocidad máxima
     }
 
-    private void idle() {
+    private void attacking() {
+        // cambia la animación a "Attack" si no está en ese estado
+        if (animStateName != "attack") {
+            anim.Play("LionJump", 0);
+            animStateName = "attack";
+        }
+    }
+
+    private void idling() {
+        // cambia la animación a "Idle" si no está en ese estado
         if (animStateName != "idle") {
-            anim.Play("ChickenIdle", 0);
+            anim.Play("LionIdle", 0);
             animStateName = "idle";
         }
         rb.velocity = Vector3.zero; //detiene la velocidad
     }
 
-    private void wander() {
+    private void returning() {
+        // cambia la animación a "Walk" si no está en ese estado
         if (animStateName != "walk") {
-            anim.Play("ChickenWalk", 0);
+            anim.Play("LionWalk", 0);
             animStateName = "walk";
         }
-        //si no hay una próxima posición para wander o si la distancia a la próxima posición para wander es menor que 0.5...
-        if ((wanderNextPosition == null) ||
-            (Vector3.Distance(transform.position, wanderNextPosition.Value) < 0.5f)) {
-            //establece la próxima posición para wander
-            wanderNextPosition = SteeringBehaviours.wanderNextPos(this);
+        rb.velocity = SteeringBehaviours.seek(this, target.position);
+        //si la distancia al target es menor o igual que el radio de des, pos es null porque
+        //ya llegó a su destino :V
+        if (Vector3.Distance(transform.position, target.position) <= slowingRadius) {
+            target = null;
         }
-        //establece la velocidad del rb para buscar la próxima posición para wanderear
-        rb.velocity = SteeringBehaviours.seek(this, wanderNextPosition.Value);
     }
 
     private void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        //dibuja una esfera alrededor de la posición de los "ojos" del agente
-        Gizmos.DrawWireSphere(eyesPercept.position, eyesPerceptRadious);
-        Gizmos.color = Color.blue;
-        //dibuja una esfera alrededor de la posición de los "oídos" del agente
-        Gizmos.DrawWireSphere(earsPercept.position, earsPerceptRadious);
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireCube(cubePercept.position, cubeSize);
     }
 
     private enum AgentStates {
         Idle,
-        Seek,
-        Wander
+        Seeking,
+        Attack,
+        Returning
     }
 }

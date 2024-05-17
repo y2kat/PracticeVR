@@ -11,8 +11,8 @@ public class SteeringBehaviours {
     /// <param name="targetPosition">The position to move towards.</param>
     /// <returns>The steering force to apply to the agent.</returns>
     public static Vector3 seek (BasicAgent agent, Vector3 targetPosition) {
-        Vector3 desiredVel = targetPosition - agent.transform.position; //diferencia entre la posición objetivo y la posición actual del agente
-        return calculateSteer(agent, desiredVel); //obtiene la fuerza de dirección que se aplicará al agente
+        Vector3 desiredVel = targetPosition - agent.transform.position;
+        return calculateSteer(agent, desiredVel);
     }
 
     /// <summary>
@@ -22,7 +22,7 @@ public class SteeringBehaviours {
     /// <param name="targetPosition">The position to move away from.</param>
     /// <returns>The steering force to apply to the agent.</returns>
     public static Vector3 flee (BasicAgent agent, Vector3 targetPosition) {
-        Vector3 desiredVel = agent.transform.position - targetPosition; //diferencia entre la posición actual del agente y la posición objetivo
+        Vector3 desiredVel = agent.transform.position - targetPosition;
         return calculateSteer(agent, desiredVel);
     }
 
@@ -32,19 +32,16 @@ public class SteeringBehaviours {
     /// <param name="agent">The agent to be moved.</param>
     /// <param name="targetPosition">The position to move towards.</param>
     /// <param name="slowingRadious">The radius at which the agent starts slowing down.</param>
-    /// <param name="threshold">The threshold distance for applying slowing down.</param> //umbral de distancia
+    /// <param name="threshold">The threshold distance for applying slowing down.</param>
     /// <returns>The velocity to apply to the agent.</returns>
     public static Vector3 arrival (BasicAgent agent, Vector3 targetPosition, float slowingRadious, float threshold) {
-        //distancia entre la posición actual del agente y la posición objetivo
         float distance = Vector3.Distance(agent.transform.position, targetPosition);
         if (distance < slowingRadious) {
             if (distance < threshold) {
-                //return Vector3.zero; //no se aplica ninguna fuerza (se devuelve un vector nulo)
+                //return Vector3.zero;
             }
-            //devuelve una fuerza proporcional a la velocidad actual del agente en dirección al objetivo
             return agent.GetComponent<Rigidbody>().velocity * ( distance / slowingRadious );
         } else {
-            //devuelve la velocidad actual del agente
             return agent.GetComponent<Rigidbody>().velocity;
         }
     }
@@ -55,18 +52,13 @@ public class SteeringBehaviours {
     /// <param name="agent">The agent to wander.</param>
     /// <returns>The random wandering direction.</returns>
     public static Vector3 wanderNextPos (BasicAgent agent) {
-        //copia normalizada de la velocidad actual del agente
         Vector3 velCopy = agent.transform.GetComponent<Rigidbody>().velocity;
         velCopy.Normalize();
-        //multiplicamos la copia normalizada por el desplazamiento de wander
         velCopy *= agent.getWanderDisplacement();
-        //dirección aleatoria en el plano XY y se normaliza
         Vector3 randomDirection = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
         randomDirection.Normalize();
-        //multiplica la dirección aleatoria por el radio de wander y se agrega a la copia normalizada
         randomDirection *= agent.getWanderRadius();
         randomDirection += velCopy;
-        //suma la posición actual del agente a esta dirección y la devuelve como la siguiente posición de wander
         randomDirection += agent.transform.position;
         return randomDirection;
     }
@@ -77,20 +69,16 @@ public class SteeringBehaviours {
     /// <param name="agent">The agent to be moved.</param>
     /// <param name="desiredVel">The desired velocity of the agent.</param>
     /// <returns>The steering force to apply to the agent.</returns>
-    private static Vector3 calculateSteer(BasicAgent agent, Vector3 desiredVel) {
+    private static Vector3 calculateSteer (BasicAgent agent, Vector3 desiredVel) {
         Rigidbody agentRB = agent.GetComponent<Rigidbody>();
         desiredVel.Normalize();
         desiredVel *= agent.getMaxVel();
         Vector3 steering = desiredVel - agentRB.velocity;
-        //para que no exceda la fuerza máxima de dirección y la divide por la masa del agente
         steering = truncate(steering, agent.getMaxSteerForce());
         steering /= agentRB.mass;
-        //se añade la velocidad actual del agente a la fuerza de dirección
         steering += agentRB.velocity;
-        //la trunca nuevamente para que no exceda la velocidad máxima del agente
         steering = truncate(steering, agent.getSpeed());
         steering.y = agentRB.velocity.y;
-        //orienta visualmente al agente hacia la dirección deseada
         lookAt(agent.transform, steering);
         return steering;
     }

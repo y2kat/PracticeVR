@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class BasicAgent : MonoBehaviour {
     [SerializeField] protected float speed, maxVel, maxSteerForce;
-    [SerializeField] protected float slowingRadius, stopThreshold; //distancia umbral para aplicar la desaceleración.
+    [SerializeField] protected float slowingRadius, stopThreshold;
     [SerializeField] protected float wanderDisplacement, wanderRadius;
     protected Transform target;
     /// <summary>
